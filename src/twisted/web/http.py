@@ -3321,4 +3321,9 @@ class HTTPFactory(protocol.ServerFactory):
             pass
         else:
             line = self._logFormatter(self._logDateTime, request) + "\n"
-            logFile.write(line.encode("utf8"))
+            encoding = "utf8"
+
+            if '_encoding' in dir(logFile) and logFile._encoding is not None:
+                encoding = logFile._encoding
+
+            logFile.write(line.encode(encoding))
