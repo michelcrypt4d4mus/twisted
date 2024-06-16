@@ -205,7 +205,15 @@ class AppLogger:
             observers = [logger.LegacyLogObserverWrapper(self._observer)]
 
         # Can't seem to find any other way to accomplish this...
-        logger.globalLogBeginner.beginLoggingTo(observers, redirectStandardIO=False)
+        TWISTED_ALLOW_STDOUT_CAPTURE = os.environ.get('TWISTED_ALLOW_STDOUT_CAPTURE', False)
+
+        if TWISTED_ALLOW_STDOUT_CAPTURE == 'True':
+            print(f"TWISTED_ALLOW_STDOUT_CAPTURE is set, capturing stdout as per usual")
+            logger.globalLogBeginner.beginLoggingTo(observers)
+        else:
+            print(f"TWISTED_ALLOW_STDOUT_CAPTURE is NOT set, NOT capturing stdout")
+            logger.globalLogBeginner.beginLoggingTo(observers, redirectStandardIO=False)
+
         self._initialLog()
 
     def _initialLog(self):
