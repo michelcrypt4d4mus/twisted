@@ -204,7 +204,8 @@ class AppLogger:
             )
             observers = [logger.LegacyLogObserverWrapper(self._observer)]
 
-        logger.globalLogBeginner.beginLoggingTo(observers)
+        # Can't seem to find any other way to accomplish this...
+        logger.globalLogBeginner.beginLoggingTo(observers, redirectStandardIO=False)
         self._initialLog()
 
     def _initialLog(self):
